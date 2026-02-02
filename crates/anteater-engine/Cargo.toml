@@ -1,0 +1,9 @@
+[package]
+name = "anteater-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anteater-ui-types = { workspace = true }
+anteater-core = { workspace = true }

@@ -1,0 +1,16 @@
+[package]
+name = "anteater-ui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anteater-ui-types = { workspace = true }
+
+egui = { workspace = true }
+eframe = { workspace = true }
+egui_dock = { workspace = true }
+egui_plot = { workspace = true }
+syntect = { workspace = true }
+plist = { workspace = true }
+serde = { workspace = true }
