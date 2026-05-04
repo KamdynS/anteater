@@ -3,7 +3,12 @@
     "allow": [
       "Bash(cargo check:*)",
       "Bash(cargo build:*)",
-      "Bash(cargo run:*)"
+      "Bash(cargo run:*)",
+      "Bash(wc:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh api:*)",
+      "Bash(git clone:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

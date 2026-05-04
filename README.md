@@ -98,12 +98,8 @@ anteater/
 
 ## Documentation
 
-- **[SESSION_SUMMARY.md](docs/SESSION_SUMMARY.md)** - Complete overview of what was built
-- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and design
-- **[UI_DEVELOPMENT_GUIDE.md](docs/UI_DEVELOPMENT_GUIDE.md)** - UI coding conventions
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design
 - **[VISUAL_LANGUAGE.md](docs/VISUAL_LANGUAGE.md)** - Ownership state visual design
-- **[THEMES.md](docs/THEMES.md)** - Theme customization guide
-- **[WORKSPACE_STRUCTURE.md](docs/WORKSPACE_STRUCTURE.md)** - Crate organization
 
 ## Technologies
 

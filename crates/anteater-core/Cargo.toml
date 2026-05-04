@@ -5,3 +5,10 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+nix = { version = "0.31.2", features = ["ptrace", "signal", "process"] }
+thiserror = "2"
+rustyline = "18"
+
+[[bin]]
+name = "sdb"
+path = "src/bin/sdb.rs"
