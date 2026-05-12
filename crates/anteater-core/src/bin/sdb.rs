@@ -11,7 +11,7 @@ fn attach() -> Result<Process> {
         let pid = Pid::from_raw(raw);
         Process::attach(pid)
     } else {
-        Process::launch(Path::new(&args[1]))
+        Process::launch(Path::new(&args[1]), true)
     }
 }
 
