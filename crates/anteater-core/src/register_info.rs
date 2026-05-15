@@ -1,5 +1,7 @@
 use crate::error::{Error, Result};
 use nix::libc;
+use std::collections::HashMap;
+use std::sync::LazyLock;
 
 pub struct RegisterInfo {
     pub id: RegisterId,
@@ -468,23 +470,64 @@ define_registers! {
     dr { dr7, 7 },
 }
 
+static BY_NAME: LazyLock<HashMap<&'static str, &'static RegisterInfo>> =
+    LazyLock::new(|| REGISTER_INFOS.iter().map(|i| (i.name, i)).collect());
+
+static BY_DWARF: LazyLock<HashMap<u32, &'static RegisterInfo>> = LazyLock::new(|| {
+    REGISTER_INFOS
+        .iter()
+        .filter_map(|i| i.dwarf_id.map(|d| (d, i)))
+        .collect()
+});
+
 impl RegisterInfo {
-    pub fn by_id(id: RegisterId) -> Result<&'static Self> {
-        REGISTER_INFOS
-            .iter()
-            .find(|i| i.id == id)
-            .ok_or(Error::NoSuchRegister(format!("{id:?}")))
+    pub fn by_id(id: RegisterId) -> &'static Self {
+        &REGISTER_INFOS[id as usize]
     }
     pub fn by_name(name: &str) -> Result<&'static Self> {
-        REGISTER_INFOS
-            .iter()
-            .find(|i| i.name == name)
-            .ok_or(Error::NoSuchRegister(format!("{name:?}")))
+        BY_NAME
+            .get(name)
+            .copied()
+            .ok_or_else(|| Error::NoSuchRegister(format!("{name:?}")))
     }
     pub fn by_dwarf(dwarf_id: u32) -> Result<&'static Self> {
-        REGISTER_INFOS
-            .iter()
-            .find(|i| i.dwarf_id == Some(dwarf_id))
-            .ok_or(Error::NoSuchRegister(format!("{dwarf_id:?}")))
+        BY_DWARF
+            .get(&dwarf_id)
+            .copied()
+            .ok_or_else(|| Error::NoSuchRegister(format!("{dwarf_id:?}")))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn by_id_returns_matching_entry() {
+        let info = RegisterInfo::by_id(RegisterId::rax);
+        assert_eq!(info.name, "rax");
+        assert_eq!(info.dwarf_id, Some(0));
+    }
+
+    #[test]
+    fn by_name_hit() {
+        let info = RegisterInfo::by_name("rdx").unwrap();
+        assert_eq!(info.id, RegisterId::rdx);
+    }
+
+    #[test]
+    fn by_name_miss() {
+        assert!(RegisterInfo::by_name("not_a_register").is_err());
+    }
+
+    #[test]
+    fn by_dwarf_hit() {
+        let info = RegisterInfo::by_dwarf(0).unwrap();
+        assert_eq!(info.id, RegisterId::rax);
+    }
+
+    #[test]
+    fn by_dwarf_miss() {
+        assert!(RegisterInfo::by_dwarf(9999).is_err());
     }
 }
