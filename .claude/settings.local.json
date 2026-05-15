@@ -12,7 +12,8 @@
       "Read(//nix/store/jwvp9g5w6yl3zz5v5axs0094ywkg30jr-coreutils-full-9.10/bin/**)",
       "Bash(command -v env)",
       "Bash(cargo test *)",
-      "Read(//tmp/sdb/include/libsdb/detail/**)"
+      "Read(//tmp/sdb/include/libsdb/detail/**)",
+      "Bash(cargo expand *)"
     ],
     "deny": [],
     "ask": []
