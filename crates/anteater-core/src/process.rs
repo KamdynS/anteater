@@ -24,7 +24,7 @@ pub enum ProcessState {
 
 pub struct StopReason {
     pub state: ProcessState,
-    pub info: u8,
+    pub info: i32,
 }
 pub struct Process {
     pub pid: Pid,
@@ -112,14 +112,14 @@ impl Process {
                 self.state = ProcessState::Exited;
                 StopReason {
                     state: ProcessState::Exited,
-                    info: code as u8,
+                    info: code,
                 }
             }
             WaitStatus::Signaled(_, sig, _) => {
                 self.state = ProcessState::Terminated;
                 StopReason {
                     state: ProcessState::Terminated,
-                    info: sig as i32 as u8,
+                    info: sig as i32,
                 }
             }
             WaitStatus::Stopped(_, sig) => {
@@ -127,7 +127,7 @@ impl Process {
                 self.read_all_registers()?;
                 StopReason {
                     state: ProcessState::Stopped,
-                    info: sig as i32 as u8,
+                    info: sig as i32,
                 }
             }
             _ => todo!("handle other variants if needed"),
