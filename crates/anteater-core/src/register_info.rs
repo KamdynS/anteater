@@ -13,6 +13,7 @@ pub struct RegisterInfo {
     pub format: RegisterFormat,
 }
 
+#[derive(PartialEq)]
 pub enum RegisterType {
     Gpr,
     SubGpr,
@@ -20,6 +21,7 @@ pub enum RegisterType {
     Dr,
 }
 
+#[derive(Debug, Clone)]
 pub enum RegisterFormat {
     Uint,
     DoubleFloat,
@@ -479,6 +481,17 @@ static BY_DWARF: LazyLock<HashMap<u32, &'static RegisterInfo>> = LazyLock::new(|
         .filter_map(|i| i.dwarf_id.map(|d| (d, i)))
         .collect()
 });
+
+pub const DR_IDS: [RegisterId; 8] = [
+    RegisterId::dr0,
+    RegisterId::dr1,
+    RegisterId::dr2,
+    RegisterId::dr3,
+    RegisterId::dr4,
+    RegisterId::dr5,
+    RegisterId::dr6,
+    RegisterId::dr7,
+];
 
 impl RegisterInfo {
     pub fn by_id(id: RegisterId) -> &'static Self {
